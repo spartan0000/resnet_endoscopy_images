@@ -72,7 +72,7 @@ model.fc = nn.Sequential(
     nn.ReLU(),
     nn.Dropout(0.3),
     nn.Linear(256,1),
-    nn.Sigmoid(),
+    
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -80,7 +80,7 @@ model = model.to(device)
 
 pos_weight = torch.tensor([n_non_cecum/n_cecum]).to(device)
 
-criterion = nn.BCEWithLogitsLoss(pos_weight = pos_weight)
+criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(
     filter(lambda p: p.requires_grad, model.parameters()),
     lr = 1e-4,
