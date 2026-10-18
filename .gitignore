@@ -1,0 +1,32 @@
+.venv/
+venv/
+*.ipynb
+.ipynb_checkpoints/
+*.pyc
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+logs/
+*.jsonl
+*.egg-info
+*.log
+
+# Virtual environments
+.venv
+*.sqlite3
+*.parquet
+*.bin
+*.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test
+
+*.pdf
+
+*.png
+*.jpg
