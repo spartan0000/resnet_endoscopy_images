@@ -77,14 +77,14 @@ for param in model.parameters():
     param.requires_grad = False
 
 #unfreeze the last 20 
-for param in list(model.parameters())[-20:]:
+for param in model.layer4.parameters(): #unfreezing the last block
     param.requires_grad = True
 
 #replacing the final layer with a binary classifier instead of the original 1000 classes in ImageNet
 model.fc = nn.Sequential(
     nn.Linear(2048,256),
     nn.ReLU(),
-    nn.Dropout(0.3),
+    nn.Dropout(0.5),
     nn.Linear(256,1),
     
 )
@@ -97,7 +97,7 @@ pos_weight = torch.tensor([n_non_cecum/n_cecum]).to(device)
 criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(
     filter(lambda p: p.requires_grad, model.parameters()),
-    lr = 1e-4,
+    lr = 1e-5,
 )
 
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
@@ -110,6 +110,7 @@ scaler = GradScaler()
 def training_loop():
     num_epochs = 20
     best_val_loss = float('inf')
+    alpha = 0.1 #for manual label smoothing since bcewithlogitsloss doesn't have a built in label smoothing parameter
     train_loader = DataLoader(
      train_dataset,
      batch_size = 32,
@@ -137,7 +138,7 @@ def training_loop():
         for images, labels in train_loader:
             images = images.to(device)
             binary = (labels == cecum_idx).float().to(device)
-            
+            binary = binary * (1-alpha) + 0.5 * alpha #manual label smoothing
             optimizer.zero_grad()
 
             with autocast(device_type = device.type):
