@@ -5,14 +5,26 @@ import torchvision.models as models
 from torch.amp import autocast, GradScaler
 from torch.utils.data import DataLoader, WeightedRandomSampler, random_split, Subset
 import torch
-
+import numpy as np
+from PIL import Image
 from sklearn.model_selection import train_test_split
 
 from collections import Counter
 
 
+#previous training runs trained on the scope guide image in the bottom left.  need to mask this out.
+#used Grad-CAM to visualize the model's attention and it was focused on the scope guide and not on the actual landmarks
+def mask_scope_guide(img):
+    img_array = np.array(img)
+    img_array[-70:, :70, :] = 0
+    return Image.fromarray(img_array)
+
+
+
+
 train_transform = transforms.Compose([
     transforms.Resize((224,224)),
+    transforms.Lambda(mask_scope_guide),
     transforms.RandomHorizontalFlip(),
     transforms.RandomVerticalFlip(),
     transforms.RandomRotation(20),
@@ -24,6 +36,7 @@ train_transform = transforms.Compose([
 
 val_transform = transforms.Compose([
     transforms.Resize((224,224)),
+    transforms.Lambda(mask_scope_guide),
     transforms.ToTensor(),
     transforms.Normalize(mean = [0.485, 0.456, 0.406],
                          std = [0.229, 0.224, 0.225])
