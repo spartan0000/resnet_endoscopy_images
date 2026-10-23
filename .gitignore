@@ -22,6 +22,9 @@ chroma_db/
 
 
 *.env
-*.ipynb
+
 .ipynb_checkpoints/
 *.pth
+*.pt
+labels/
+polyp_detection/

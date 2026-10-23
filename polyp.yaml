@@ -1,0 +1,5 @@
+path: D:/hyper-kvasir-segmented-images-extracted/polyp_detection
+train: images/train
+val: images/val
+nc: 1
+names: ['polyp']
