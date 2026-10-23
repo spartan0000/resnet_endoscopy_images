@@ -89,7 +89,7 @@ model = models.resnet50(weights = models.ResNet50_Weights.IMAGENET1K_V2)
 for param in model.parameters():
     param.requires_grad = False
 
-#unfreeze the last 20 
+#unfreeze the last block 
 for param in model.layer4.parameters(): #unfreezing the last block
     param.requires_grad = True
 
@@ -194,7 +194,7 @@ def training_loop():
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
-            torch.save(model.state_dict(), "best_model.pth")
+            torch.save(model.state_dict(), "best_model_2.pth")
             print(f"Best model saved at epoch {epoch +1}")
 
         accuracy = correct/total
