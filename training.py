@@ -105,7 +105,7 @@ model.fc = nn.Sequential(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-pos_weight = torch.tensor([n_non_cecum/n_cecum]).to(device)
+pos_weight = torch.tensor([n_non_cecum/n_cecum]).to(device) #took this out of the loss function since we already use random sampler with weights
 
 criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(
