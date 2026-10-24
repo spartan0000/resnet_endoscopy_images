@@ -28,3 +28,6 @@ chroma_db/
 *.pt
 labels/
 polyp_detection/
+weights/
+runs/
+data/
